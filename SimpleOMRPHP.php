@@ -11,7 +11,7 @@
  *
  * Antes de passar a imagem, verifique se ela já está na resolução(px) certa e, se possível, preto e branco
  *
- * É recomendado primeiro fazer um teste, com o debug ligado e usar a imagem do debug para fazer a anotação da posição das marcações
+ * É recomendado primeiro fazer um teste, com o debug ligado e usar a imagem do debug para fazer a anotação da posição das marcações em arquivos PDF
  */
 class SimpleOMRPHP
 {
@@ -29,7 +29,7 @@ class SimpleOMRPHP
     /**
      * Construtor, ira receber tudo que for necessário e irá jogar o resultado em $result, use getResult().
      * Se o caminho do $debugimagepath não existir, ele irá tentar criar um diretório 0777, é melhor você se certificar que o caminho existe.
-     * Se a 
+     *
      * @param string $mappath
      * @param string $imagepath
      * @param int $tolerance
@@ -157,9 +157,12 @@ class SimpleOMRPHP
 
     /**
      * @param $imagepath
+     *
+     * @throws UnexpectedResolutionException
      */
     private function prepareImage($imagepath){
         $imagick = new Imagick();
+        $map = $this->getMap();
         $imagick->readImage($imagepath.'[0]');
         $imagick->modulateImage(100, 0, 100);
         $imagick->posterizeimage(2, false);
@@ -168,6 +171,9 @@ class SimpleOMRPHP
         @$imagick->medianFilterImage(5);
         $imagick->setImageCompression(imagick::COMPRESSION_JPEG);
         $imagick->setImageCompressionQuality(100);
+        if($imagick->getImageWidth() != $map['expectedwidth'] || $imagick->getImageHeight() != $map['expectedheight']){
+            throw new UnexpectedResolutionException('A resolução esperada não é igual a resolução final. expectedwidth = '.$map['expectedwidth'].' finalwidth = '.$imagick->getImageWidth().' expectedheight = '. $map['expectedheight'].' finalheight = '.$imagick->getImageHeight());
+        }
         $this->setImagick($imagick);
     }
 
@@ -348,3 +354,4 @@ class FileNotFoundException extends Exception{}
 class JsonDecodeException extends Exception{}
 class InvalidToleranceException extends Exception{}
 class InvalidTargetTypeException extends Exception{}
+class UnexpectedResolutionException extends Exception{}
