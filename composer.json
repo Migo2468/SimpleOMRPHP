@@ -1,0 +1,17 @@
+{
+    "name": "romariorramos/simple-omrphp",
+    "description": "An simple Optical Marking Recognition for php. Uses Imagick, ImageMagick and GhostScript",
+	"keywords": ["omr"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romário Rodrigues Ramos",
+            "email": "romariox@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+		"php": ">=5.3.0"
+	}
+}
