@@ -100,7 +100,7 @@ class SimpleOMRPHP
     private function groupAnalytics($group){
         $analyticsresults = ['groupname' => $group['groupname']];
         $markedtargets = '';
-        $targetresult = '';
+        $targetresult = [];
 
         foreach ($group['grouptargets'] as $target){
             if($target['type'] == 'rectangle'){
